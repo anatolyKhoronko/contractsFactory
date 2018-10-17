@@ -16,10 +16,8 @@ class App extends Component {
   };
 
   events = () => {
-
     web3.currentProvider.publicConfigStore.on('update', async(arg) => {
       if (arg.selectedAddress != this.state.account) {
-
         this.setState({ account: arg.selectedAddress });
         this.getRole(this.state.account);
         console.log('Change ethereum accounts', arg, this.state.account);
@@ -52,16 +50,14 @@ class App extends Component {
     this.setState({ account: accounts[0] });
     this.getRole(accounts[0]);
     this.events();
-
   }
 
 
   showParticipant = () => {
-
     const props = {
       account: this.state.account,
+      role: this.state.role,
     };
-
     switch (this.state.role) {
       case '0':
         return <Manager {...props}/>;
@@ -79,7 +75,6 @@ class App extends Component {
     return (
       <section >
         {this.showParticipant()}
-
       </section>
     );
   }

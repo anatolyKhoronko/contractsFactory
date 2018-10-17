@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import contractsFactory, { logInstance } from '../ethereum/contractsFactory';
+import ContractsList from './ContractsList'
+import contractInstance from '../ethereum/contract';
 import web3 from '../ethereum/web3';
 
 class Manager extends Component {
@@ -31,59 +33,15 @@ class Manager extends Component {
     e.preventDefault();
     const { customer, executor, amount, rules } = this.state;
     const byteRules = rules.map(rule => web3.utils.fromAscii(rule));
+    console.log(byteRules);
     await contractsFactory.methods.createContract(customer, executor, amount, byteRules).send({
       from: this.props.account,
     });
   };
 
-  getContract = async(contract) => {
-    // e.preventDefault();
-    console.log('ds');
-    const contractData = await contractsFactory.methods.getContract(contract).call({ from: this.props.account });
-    console.log(contractData);
-    return contractData;
-    // this.setState({ contract });
-  };
-
-  getContracts = async(e) => {
-    e.preventDefault();
-    console.log('asd');
-    const contracts = await contractsFactory.methods.getParticipantContracts().call({ from: this.props.account });
-    const contractsData = contracts.map(contract => this.getContract(contract));
-    const result = await Promise.all(contractsData);
-    this.setState({contracts: this.renderContract(result)});
-  };
 
 
-  renderContract = (contracts) => {
-    if (!contracts.length) return null;
-    return contracts.map(contract => {
-      const rules = contract[2].map(rule => <p>{web3.utils.toAscii(rule)}</p>);
-      const participants = contract[0].map((address, index) => {
-        let participant;
-        if (index === 0) participant = 'Manager';
-        else if (index === 1) participant = 'Customer';
-        else participant = 'Executor';
-        return (
-          <p>
-            {participant}:
-            <br/>
-            {address}
-          </p>
-        );
 
-      });
-      const amount = contract[1];
-      return (
-        <div style={{border: `1px solid black`}}>
-          {participants}
-          {amount}
-          {rules}
-        </div>);
-    });
-
-
-  };
 
   handlerRules = (e, index) => {
     const _target = e.target;
@@ -106,13 +64,14 @@ class Manager extends Component {
   };
 
 
+
   changeField = field => e => this.setState({ [field]: e.target.value });
 
 
 //"0xda3c4831D767726f549491aa92ba6D6033B04311"
 
   render() {
-    const { customer, executor, amount, rules, participant, participantAddress, participantName, contracts } = this.state;
+    const { customer, executor, amount, participant, participantAddress, participantName } = this.state;
     return (
       <div>
         <h1>Manager</h1>
@@ -155,12 +114,7 @@ class Manager extends Component {
         </form>
 
         <hr/>
-        <form onSubmit={this.getContracts}>
-          {/*<label>Contract address</label>*/}
-          {/*<input type="text" value={contractAddress} onChange={this.changeField('contractAddress')}/>*/}
-          <button>Get Contracts</button>
-        </form>
-        {contracts}
+        <ContractsList account={this.props.account} />
       </div>
     );
   }
