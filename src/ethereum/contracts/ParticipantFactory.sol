@@ -64,6 +64,4 @@ contract ParticipantFactory {
         address[] memory contracts = addressParticipantToContracts[msg.sender];
         return contracts;
     }
-
-
 }

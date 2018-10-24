@@ -12,6 +12,8 @@
     "web3": "1.0.0-beta.33"
   },
   "scripts": {
+    "compile": "node src/ethereum/compile.js",
+    "deploy": "node src/ethereum/deploy.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

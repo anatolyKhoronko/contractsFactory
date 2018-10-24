@@ -1,7 +1,5 @@
-import web3, { web3log } from './web3';
+import web3 from './web3';
 import Contract from './build/Contract.json';
-
-
 
 const instance = (address) => {
   return new Promise((res, rej) => {

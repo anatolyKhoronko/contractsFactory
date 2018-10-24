@@ -2,8 +2,6 @@ import web3, { web3log } from './web3';
 import ContractsFactory from './build/ContractsFactory.json';
 import address from './address.json';
 
-
-
 const instance = new web3.eth.Contract(
   JSON.parse(ContractsFactory.interface),
   address.ContractsFactory
@@ -11,7 +9,7 @@ const instance = new web3.eth.Contract(
 
 export default instance;
 
-export const logInstance = new web3log.eth.Contract(
+export const logInstance = new web3log.eth.Contract( // For get events
   JSON.parse(ContractsFactory.interface),
   address.ContractsFactory
 );
